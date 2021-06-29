@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+  <script src="https://unpkg.com/ipfs-http-client@30.1.3/dist/index.js"></script>
+  <script src="https://bundle.run/buffer@5.2.1"></script>
+  {{!-- <script data-main="scripts/app" src="scripts/require.js"></script> --}}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+    <div style="width: 600px; margin-top: 50px; margin-left: 30%; border: 2px solid black;">
+        <h2 style="text-align: center;">Log In</h2>
+        <form action="/auth" style="padding: 20px;">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="number" class="form-control" id="id" name="id" aria-describedby="emailHelp"
+                    placeholder="Enter Id">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                    else.</small>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label for="hash">ID File</label>
+                <input type="file" class="form-control" id="upload" name="IDF" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="ipfs">Hash will be displayed below</label>
+                <input type="hidden" class="form-control" name="ipfs" id="ipfs">
+            </div>
+            <input type="submit" id="submt" style="display:none" class="btn btn-primary">
+        </form>
+    </div>
+
+    <script>
+        const ipfs = window.IpfsHttpClient('ipfs.infura.io', '5001', { protocol: 'https' });
+
+        var ip_hash = ''
+
+    $("#upload").on("change", function () {
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+
+        const magic_array_buffer_converted_to_buffer = buffer.Buffer(reader.result);
+        console.log(magic_array_buffer_converted_to_buffer)
+
+        ipfs.add(magic_array_buffer_converted_to_buffer, async (error, result) => {
+          // console.log("hii")
+          var x = "https://gateway.ipfs.io/ipfs/";
+          console.log('Ipfs result', result[0].hash)
+          document.getElementById("ipfs").value = result[0].hash;
+          document.getElementById("ipfs").type = "visible";
+          document.getElementById("ipfs").readOnly = true;
+          if (error) {
+            console.error(error)
+            return
+          }
+          // console.log(result) 
+         // x = x + result[0].hash;
+          //localStorage.setItem("LS-1", result[0].hash);
+          //console.log(result)
+          //document.getElementById('manoj').src = x;
+          //document.getElementById('abc').innerHTML = result[0].hash;
+          //ip_hash = result[0].hash;
+        })
+
+      }
+      reader.readAsArrayBuffer(this.files[0]);
+      $("#submt").show();
+      // console.log("hash",ip_hash)
+    })
+    
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

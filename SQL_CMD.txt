@@ -1,0 +1,19 @@
+Instructions for creating and using MYSQL database 
+__________________________________________________
+1. Open MySQL command line client i.e MySQL
+
+2. Execute these commands ,
+	-> create database auth_user;
+	-> use auth_user;
+	-> create table user(
+		voter_id nvarchar(15) primary key, 
+		voter_name nvarchar(100), 
+		email_id nvarchar(100), 
+		ipfs_hash nvarchar(500)
+		);
+
+4. Insert values into the table,
+	->insert into user values('BF1391', 'Manoj Kanetkar', 'mashr@danskeit.co.in', 				  'QmWGeq4cumZiU3qJFNfbVBNEiQXicj1UEbArqxpv9GWxSW')
+
+3. If any error occured with username and password refer to below link,
+   https://stackoverflow.com/questions/50026939/php-mysqli-connect-authentication-      method-unknown-to-the-client-caching-sha2-pa
